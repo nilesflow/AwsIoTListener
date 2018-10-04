@@ -1,0 +1,11 @@
+[Unit]
+Description=Aws IoT Listener
+
+[Service]
+ExecStart=/usr/bin/env python /path/to/AwsIoTListener/index.py -D
+Restart=always
+Type=forking
+PIDFile=/var/run/aws-iot-listenerd.pid
+
+[Install]
+WantedBy=multi-user.target
