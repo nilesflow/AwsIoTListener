@@ -3,6 +3,7 @@
 
 # standard modules
 import json
+import uuid
 
 # user modules
 from pyfw.libs import util
@@ -44,7 +45,7 @@ class PahoListener(PahoAwsIot, object):
 		if self.is_debug:
 			self.publish(
 				'raspberrypi/request/listen',
-				request_id = util.uniqid(),
+				request_id = str(uuid.uuid4()),
 			)
 
 	def _on_message(self, mosq, obj, msg):
@@ -88,9 +89,16 @@ class PahoListener(PahoAwsIot, object):
 				# 音声録音とテキスト変換
 				result = self.listener.listen()
 				ack['result'] = result
+			else:
+				raise ParamError("can't find action.")
 
 			# 処理終了
 			self.logger.info('on message success.')
+
+		except ParamError as e:
+			# 他のメッセージを処理しない
+			self.logger.info(e.description)
+			return
 
 		except RecognitionError as e:
 			# 通常変換失敗時
