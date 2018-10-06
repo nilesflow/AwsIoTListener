@@ -35,14 +35,17 @@ class PahoListener(PahoAwsIot, object):
 
 		self.topic_pub = kargs['paho']['MQTT_TOPIC_PUB']
 
+		self.is_debug = kargs['is_debug']
+
 	def _on_subscribe(self, mosq, obj, mid, granted_qos):
 		self.logger.info("Subscribed to Topic with QoS: " + str(granted_qos))
 
 		# test code
-		self.publish(
-			'raspberrypi/request/listen',
-			request_id = 1
-		)
+		if self.is_debug:
+			self.publish(
+				'raspberrypi/request/listen',
+				request_id = util.uniqid(),
+			)
 
 	def _on_message(self, mosq, obj, msg):
 		"""
@@ -106,18 +109,8 @@ class PahoListener(PahoAwsIot, object):
 			ack['result'] = "録音処理中にエラーが発生しました。"
 
 		# 応答返却
-		self.publish(
-			self.topic_pub,
-			**ack
-		)
+		self.publish(self.topic_pub, **ack)
 		self.logger.info('on message complete.')
-
-	def publish(self, topic, **kargs):
-		self.logger.info(kargs)
-		payload = json.dumps(kargs)
-		self.logger.info(topic)
-		self.logger.info(payload)
-		self.mqttc.publish(topic, payload)
 
 	def run(self):
 		self.mqttc.loop_forever()

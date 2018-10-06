@@ -28,7 +28,8 @@ class AwsIoTListener(AppBase, object):
 			paho = self.config['Paho'],
 			azure = self.config['Azure'],
 			path_temp = path_temp,
-			logging = self.logging
+			logging = self.logging,
+			is_debug = kargs['is_debug'],
 		)
 
 	def run(self):

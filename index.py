@@ -14,16 +14,19 @@ sys.path.append(dir + '/user-packages')
 from pyfw.libs import util
 from awsiotlistener import AwsIoTListener
 
+is_debug = False
+
 def run(is_daemon = False):
 	AwsIoTListener(
 		file_config = 'config.ini',
-		is_daemon = is_daemon
+		is_daemon = is_daemon,
+		is_debug = is_debug,
 	).run()
 
 def daemonize():
 	pid = os.fork()
 	if pid > 0:
-		f = open('/var/run/aws-iot-listener.pid', 'w')
+		f = open('/var/run/aws-iot-listenerd.pid', 'w')
 		f.write(str(pid) + "\n")
 		f.close()
 		sys.exit()
@@ -34,6 +37,9 @@ def daemonize():
 if __name__== '__main__':
 	try:
 		# コマンドライン引数を判定
+		if '-d' in sys.argv:
+			is_debug = True
+
 		if '-D' in sys.argv:
 			# デーモン起動
 			daemonize()
