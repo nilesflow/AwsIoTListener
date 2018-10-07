@@ -29,6 +29,7 @@ class PahoListener(PahoAwsIot, object):
 		)
 
 		self.listener = Listener(
+			pyaudio = kargs['pyaudio'],
 			path_temp = kargs['path_temp'],
 			azure = kargs['azure'],
 			logging = kargs['logging']

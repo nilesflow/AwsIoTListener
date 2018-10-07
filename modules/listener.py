@@ -42,6 +42,8 @@ class Listener:
 
 		self.path_voice = path + Listener.file_voice
 
+		self.input_device_index = kargs['pyaudio']['input_device_index']
+
 		# Cognitiveインスタンスを作成
 		self.cognitive = Cognitive(
 			key = kargs['azure']['SUBSCRIPTION_KEY'],
@@ -56,8 +58,8 @@ class Listener:
 		#録音時間
 		RECORD_SECONDS = 10
 
-		#マイク0番を設定
-		input_device_index = 1
+		#マイク番号を設定: cat /proc/asound/modules
+		input_device_index = self.input_device_index
 		#マイクからデータ取得
 		stream = self.audio.open(
 			format = pyaudio.paInt16,

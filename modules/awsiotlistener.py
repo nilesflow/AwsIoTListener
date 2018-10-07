@@ -26,6 +26,7 @@ class AwsIoTListener(AppBase, object):
 		# 待ち受けモジュール
 		self.listener = PahoListener(
 			paho = self.config['Paho'],
+			pyaudio = self.config['pyaudio'],
 			azure = self.config['Azure'],
 			path_temp = path_temp,
 			logging = self.logging,
